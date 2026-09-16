@@ -38,7 +38,7 @@ Sur un espace Team ou Enterprise, un propriétaire doit d’abord rendre le conn
 
 ## Claude Code
 
-**Connexion native en préparation :** le service Brain n’accepte pas encore le retour de connexion local utilisé par cette application. Le plugin peut être installé, mais le login reste bloqué tant que cette compatibilité n’est pas activée côté Mati. Le parcours Claude Chat/Cowork utilise une connexion différente.
+Le service Brain accepte le retour de connexion local de Claude Code. Le contrôle du serveur a été vérifié; la connexion Google et la lecture doivent encore être réalisées avec ton compte dans l’application.
 
 Dans une session Claude Code :
 
@@ -49,7 +49,7 @@ Dans une session Claude Code :
 
 Choisis l’installation pour ton utilisateur. Dans **`/plugin` → Marketplaces → mati**, active **Enable auto-update** : les marketplaces tiers ne l’activent pas par défaut. Redémarre Claude Code après l’installation ou une mise à jour. [Installation et mises à jour Claude Code](https://code.claude.com/docs/en/discover-plugins).
 
-Une fois la compatibilité de connexion confirmée par Mati :
+Pour connecter ton compte :
 
 1. Lance **`/mcp`** dans la session.
 2. Sélectionne le serveur Brain fourni par le plugin, en vérifiant son adresse. Son nom affiché peut inclure un préfixe du plugin.
@@ -61,7 +61,7 @@ Si aucune entrée Brain n’est visible après redémarrage, vérifie l’activa
 
 ## Codex — installer le plugin
 
-**Connexion native en préparation :** le service Brain n’accepte pas encore le retour de connexion local de Codex. Les étapes ci-dessous installent et préparent le plugin; elles ne constituent pas actuellement une connexion réussie. La compatibilité côté service doit être confirmée avant le test de lecture.
+**Connexion native Codex en préparation :** un ajustement supplémentaire côté Mati reste nécessaire avant l’authentification de Codex CLI 0.153.4. Les étapes ci-dessous permettent d’installer le plugin; attends la confirmation de compatibilité avant de lancer la connexion.
 
 Pour ajouter le marketplace depuis le terminal :
 
@@ -92,7 +92,7 @@ codex mcp list
 codex mcp get mati-brain
 ```
 
-Une fois la compatibilité de connexion confirmée côté Mati, lance l’authentification du serveur du plugin :
+Une fois la compatibilité confirmée côté Mati, lance l’authentification du serveur du plugin :
 
 ```sh
 codex mcp login mati-brain --oauth-client-registration dcr
@@ -100,7 +100,7 @@ codex mcp login mati-brain --oauth-client-registration dcr
 
 Le nom **`mati-brain`** a été observé dans la liste locale après installation du plugin. Si ton installation affiche un autre nom, vérifie son adresse avant de l’utiliser; ne confonds pas une ancienne connexion manuelle avec celle du plugin. Termine l’authentification Google **`@mati.tech`** dans le navigateur, puis démarre une nouvelle session Codex et demande la lecture de vérification. Si l’entrée manque, passe par le gestionnaire du plugin dans l’application. Si le login refuse l’adresse de retour OAuth, transmets cette erreur au mainteneur.
 
-Les commandes `list`, `get` et `login` sont présentes dans l’aide locale de Codex CLI 0.153.4. La connexion native et sa compatibilité avec le service Brain restent à vérifier avant de déclarer ce parcours prêt.
+Les commandes `list`, `get` et `login` sont présentes dans l’aide locale de Codex CLI 0.153.4. Le test natif a identifié un retour de connexion local supplémentaire à autoriser côté Mati. Aucun changement de compte ou de droits n’est nécessaire pour corriger ce problème de compatibilité.
 
 ### Mettre le plugin à jour
 
@@ -162,4 +162,4 @@ Après réussite : **« Commencer avec Mati. Montre-moi ce que je peux faire ave
 
 Un code HTTP seul ne suffit pas toujours à distinguer une session expirée d’un refus de droits; conserver le message exact et l’étape concernée. Ne partage pas de secret ni d’URL contenant un code d’authentification.
 
-**État de validation :** sources officielles et aides locales relues le 16 septembre 2026. La réussite complète avec un vrai compte employé, le contrôle de retrait d’accès et un cas métier complet restent à réaliser séparément. Cette documentation ne modifie aucun compte ni aucun droit.
+**État de validation au 16 septembre 2026 :** le premier correctif serveur est activé. Les contrôles HTTPS acceptent les retours de Claude web et Claude Code, et refusent les adresses interdites testées. Le test natif Codex reste bloqué à l’enregistrement et nécessite l’ajustement complémentaire indiqué ci-dessus. La connexion Google complète avec un vrai compte employé, la lecture documentaire, le retrait d’accès et un cas métier complet restent à réaliser séparément. Cette documentation ne modifie aucun compte ni aucun droit.
