@@ -61,7 +61,7 @@ Si aucune entrée Brain n’est visible après redémarrage, vérifie l’activa
 
 ## Codex — installer le plugin
 
-**Connexion native Codex en préparation :** un ajustement supplémentaire côté Mati reste nécessaire avant l’authentification de Codex CLI 0.153.4. Les étapes ci-dessous permettent d’installer le plugin; attends la confirmation de compatibilité avant de lancer la connexion.
+Le service Brain accepte les retours de connexion de Codex. La connexion OAuth et la lecture d’une fiche commune ont été vérifiées dans Codex CLI 0.153.4 avec le compte autorisé du contrôle. Chaque employé doit connecter son propre compte et effectuer sa lecture de vérification.
 
 Pour ajouter le marketplace depuis le terminal :
 
@@ -92,7 +92,7 @@ codex mcp list
 codex mcp get mati-brain
 ```
 
-Une fois la compatibilité confirmée côté Mati, lance l’authentification du serveur du plugin :
+Lance l’authentification du serveur du plugin :
 
 ```sh
 codex mcp login mati-brain --oauth-client-registration dcr
@@ -100,7 +100,7 @@ codex mcp login mati-brain --oauth-client-registration dcr
 
 Le nom **`mati-brain`** a été observé dans la liste locale après installation du plugin. Si ton installation affiche un autre nom, vérifie son adresse avant de l’utiliser; ne confonds pas une ancienne connexion manuelle avec celle du plugin. Termine l’authentification Google **`@mati.tech`** dans le navigateur, puis démarre une nouvelle session Codex et demande la lecture de vérification. Si l’entrée manque, passe par le gestionnaire du plugin dans l’application. Si le login refuse l’adresse de retour OAuth, transmets cette erreur au mainteneur.
 
-Les commandes `list`, `get` et `login` sont présentes dans l’aide locale de Codex CLI 0.153.4. Le test natif a identifié un retour de connexion local supplémentaire à autoriser côté Mati. Aucun changement de compte ou de droits n’est nécessaire pour corriger ce problème de compatibilité.
+Les commandes `list`, `get` et `login` sont présentes dans l’aide locale de Codex CLI 0.153.4. Le contrôle natif a réussi la connexion, puis `brain_begin`, `brain_catalog` et `brain_read` dans une même consultation avec le plugin `mati-brain`. Cette réussite concerne le compte utilisé pour le contrôle; elle n’accorde aucun accès supplémentaire aux autres comptes.
 
 ### Mettre le plugin à jour
 
@@ -162,4 +162,4 @@ Après réussite : **« Commencer avec Mati. Montre-moi ce que je peux faire ave
 
 Un code HTTP seul ne suffit pas toujours à distinguer une session expirée d’un refus de droits; conserver le message exact et l’étape concernée. Ne partage pas de secret ni d’URL contenant un code d’authentification.
 
-**État de validation au 16 septembre 2026 :** le premier correctif serveur est activé. Les contrôles HTTPS acceptent les retours de Claude web et Claude Code, et refusent les adresses interdites testées. Le test natif Codex reste bloqué à l’enregistrement et nécessite l’ajustement complémentaire indiqué ci-dessus. La connexion Google complète avec un vrai compte employé, la lecture documentaire, le retrait d’accès et un cas métier complet restent à réaliser séparément. Cette documentation ne modifie aucun compte ni aucun droit.
+**État de validation au 16 septembre 2026 :** le correctif serveur est activé. Les contrôles HTTPS acceptent les retours prévus de Claude web, Claude Code et Codex, et refusent les adresses interdites testées. La connexion OAuth native et une lecture commune ont réussi dans Codex CLI 0.153.4 avec le compte autorisé du contrôle. Les parcours complets dans Claude/Cowork et Codex Desktop, les essais avec un employé non administrateur, le retrait d’accès et un cas métier complet restent à réaliser séparément. Cette documentation ne modifie aucun compte ni aucun droit.
