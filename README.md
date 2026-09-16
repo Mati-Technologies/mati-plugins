@@ -2,19 +2,20 @@
 
 **Mati Brain** aide ton assistant à retrouver les méthodes Mati auxquelles tu as accès et à les utiliser pour ton travail.
 
-Ce dépôt distribue le petit point d’entrée et sa connexion au service Brain. Les méthodes privées restent dans Brain : elles ne sont pas copiées dans le plugin.
+Le plugin est le point d’entrée dans ton assistant. **Mati héberge déjà le service Brain** auquel il se connecte : tu n’as aucun serveur à installer. Ce dépôt public fournit les instructions de connexion; les méthodes privées sont chargées depuis Brain après vérification de tes accès.
 
 - Marketplace : **`mati`**
-- Plugin : **`mati-brain`**, version **0.1.0**
+- Plugin : **`mati-brain`**, version **0.1.1**
 - Source : [Mati-Technologies/mati-plugins](https://github.com/Mati-Technologies/mati-plugins)
 
 ## Commencer
 
-1. Suis le [guide d’installation](docs/installation.md) pour ton application.
-2. Connecte ton compte professionnel lorsque l’application le demande.
-3. Dans une nouvelle conversation, demande : **« Utilise Mati Brain pour me montrer ce que je peux faire et m’aider à commencer. »**
+1. Installe le plugin avec le [guide de ton application](docs/installation.md).
+2. Termine la connexion Google avec ton compte **`@mati.tech`**; ce compte doit avoir les droits Brain attribués par Mati.
+3. Dans une nouvelle conversation, demande : **« Connecter Mati Brain : vérifie mon accès au catalogue et lis une fiche commune autorisée, sans ouvrir de dossier client. »**
+4. Après confirmation de la lecture, demande : **« Commencer avec Mati. Montre-moi ce que je peux faire avec mes accès. »**
 
-L’installation ne donne pas de nouveaux droits sur les méthodes ou les autres applications. Chaque personne conserve ses propres connexions.
+Le catalogue et une vraie lecture doivent réussir avant que l’assistant annonce la connexion comme prête. L’installation ne donne pas de nouveaux droits sur les méthodes ou les autres applications. Chaque personne conserve ses propres connexions.
 
 ## Pour l’équipe qui maintient le plugin
 

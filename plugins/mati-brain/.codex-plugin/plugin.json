@@ -1,6 +1,6 @@
 {
   "name": "mati-brain",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Commencer avec Mati et appliquer les méthodes accessibles du Brain privé.",
   "author": {
     "name": "Mati Technologies"
@@ -15,7 +15,7 @@
     "developerName": "Mati Technologies",
     "category": "Productivity",
     "capabilities": [],
-    "defaultPrompt": ["Commencer avec Mati. Montre-moi ce que je peux faire avec mes accès."]
+    "defaultPrompt": ["Connecte Mati Brain et vérifie mon accès.", "Commencer avec Mati. Montre-moi ce que je peux faire avec mes accès."]
   },
   "mcpServers": "./.mcp.json"
 }

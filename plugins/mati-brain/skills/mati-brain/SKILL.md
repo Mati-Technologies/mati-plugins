@@ -1,11 +1,25 @@
 ---
 name: mati-brain
-description: "Utiliser pour le travail Mati : commencer avec Mati, trouver une information interne, appliquer une méthode Mati, préparer un exploratoire ou un atelier, retrouver un dossier, choisir les connexions utiles, proposer une amélioration et suivre sa demande. Consulter le Brain privé avant d'affirmer une méthode ou une règle Mati. Ne s'applique pas aux demandes personnelles sans lien avec Mati."
+description: "Utiliser pour le travail Mati : connecter Mati Brain, vérifier son accès, commencer avec Mati, trouver une information interne, appliquer une méthode Mati, préparer un exploratoire ou un atelier, retrouver un dossier, choisir les connexions utiles, proposer une amélioration et suivre sa demande. Consulter le Brain privé avant d'affirmer une méthode ou une règle Mati. Ne s'applique pas aux demandes personnelles sans lien avec Mati."
 ---
 
 # Commencer avec Mati
 
 Ce skill est le point d'entrée du Brain privé, interface 1. Les méthodes et connaissances viennent du service authentifié. Les noms d'outils peuvent porter un préfixe propre à l'application : identifier les outils `brain_*` du connecteur Mati Brain disponible.
+
+## Connecter Mati Brain et vérifier son accès
+
+Le serveur est hébergé par Mati. Ce plugin apporte les instructions et la configuration de connexion; il ne déploie pas le serveur sur le poste de l'employé. Son adresse est `https://mati-brain-pilot.tail760c23.ts.net/mcp`. L'adresse peut être publique; le contenu exige l'identité et les droits de la personne.
+
+Pour « Connecter Mati Brain », « Vérifie mon accès » ou un problème de connexion :
+
+1. Vérifier si les outils Brain sont disponibles dans l'application actuelle. Si le plugin vient d'être installé ou mis à jour, une nouvelle conversation ou un redémarrage peut être nécessaire. Ne pas ajouter automatiquement une deuxième connexion si une connexion Brain existe déjà.
+2. Si la connexion personnelle manque, guider uniquement le parcours de l'application utilisée avec le [guide de connexion Mati](https://github.com/Mati-Technologies/mati-plugins/blob/main/docs/installation.md). Ce guide public reste consultable sans Brain. Claude Chat/Cowork utilise son gestionnaire de connecteurs; Claude Code propose l'authentification dans `/mcp`; Codex propose l'authentification dans ses réglages MCP. Les intitulés et noms de serveurs peuvent varier : suivre ce qui est réellement affiché. L'import GitHub de ce plugin ne couvre pas ChatGPT web/mobile.
+3. L'utilisateur choisit son compte Google professionnel `@mati.tech` et termine le consentement dans l'application ou le navigateur. Ne jamais demander son mot de passe, un code OAuth, un jeton ou une clé dans la conversation. Ne pas modifier de compte, de groupe Workspace ou de réglage du serveur pour terminer ce parcours employé.
+4. Quand les outils sont disponibles, effectuer la lecture de contrôle : `brain_begin(interface_version=1)`, puis `brain_catalog` et `brain_read` avec la même consultation. Choisir `mati.commencer` si autorisé, sinon une fiche commune effectivement présente dans le catalogue; ne pas deviner un identifiant ou lire un dossier client pour ce contrôle. Réutiliser cette consultation si l'utilisateur poursuit immédiatement la même tâche.
+5. Confirmer « Mati Brain est connecté et une lecture a réussi » seulement après la lecture réussie, avec sa provenance. Si le catalogue est vide, aucun document approprié n'est autorisé ou la lecture échoue, indiquer cette limite; une installation, une page de connexion ou une réponse de santé du serveur ne suffit pas.
+
+Adapter la prochaine action au résultat observable : outils absents → installation/activation et nouvelle conversation; connexion requise ou expirée → authentification personnelle; refus d'accès explicite → vérification par l'administrateur des accès prévus; erreur serveur ou réseau → conserver le point de reprise. Un échec OAuth technique ne prouve pas que la personne n'a pas les droits. Relever seulement le message utile sans paramètres OAuth ni secrets, sans inventer la cause et sans boucler les tentatives.
 
 ## Consulter Brain avant de travailler
 
@@ -49,6 +63,7 @@ Terminer un résultat fondé sur Brain par une provenance courte : titre, identi
 ## Exemples de demandes
 
 - « Commencer avec Mati. Montre-moi ce que je peux faire avec mes accès. »
+- « Connecte Mati Brain et vérifie que je peux lire une méthode. »
 - « Prépare mon exploratoire avec la méthode Mati. »
 - « Prépare mon atelier découverte avec les documents de ce dossier. »
 - « Où trouver cette information et quelle connexion me faut-il? »
