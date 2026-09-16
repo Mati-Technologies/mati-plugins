@@ -1,0 +1,6 @@
+interface:
+  display_name: "Commencer avec Mati"
+  short_description: "Les méthodes Mati à jour, selon tes accès."
+  default_prompt: "Utilise $mati-brain pour me montrer ce que je peux faire avec mes accès."
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,21 @@
+{
+  "name": "mati-brain",
+  "version": "0.1.0",
+  "description": "Commencer avec Mati et appliquer les méthodes accessibles du Brain privé.",
+  "author": {
+    "name": "Mati Technologies"
+  },
+  "homepage": "https://github.com/Mati-Technologies/mati-plugins",
+  "repository": "https://github.com/Mati-Technologies/mati-plugins",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Mati Brain",
+    "shortDescription": "Les méthodes Mati à jour, selon tes accès.",
+    "longDescription": "Commencer avec Mati, trouver la bonne méthode dans Brain et travailler avec ses propres connexions. Le contenu privé est chargé après authentification selon les droits de chaque personne.",
+    "developerName": "Mati Technologies",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": ["Commencer avec Mati. Montre-moi ce que je peux faire avec mes accès."]
+  },
+  "mcpServers": "./.mcp.json"
+}

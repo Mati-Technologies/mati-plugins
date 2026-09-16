@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "mati-brain": {
+      "type": "http",
+      "url": "https://mati-brain-pilot.tail760c23.ts.net/mcp"
+    }
+  }
+}

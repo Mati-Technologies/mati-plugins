@@ -1,0 +1,12 @@
+{
+  "name": "mati",
+  "owner": {"name": "Mati Technologies"},
+  "metadata": {"description": "Plugins Mati : point d'entrée vers les méthodes du Brain privé."},
+  "plugins": [
+    {
+      "name": "mati-brain",
+      "source": "./plugins/mati-brain",
+      "description": "Commencer avec Mati et appliquer les méthodes accessibles du Brain privé."
+    }
+  ]
+}
