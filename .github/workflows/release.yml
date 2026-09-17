@@ -18,4 +18,4 @@ jobs:
       - name: Publish release artifacts
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "${GITHUB_REF_NAME}" dist/mati-brain-"${GITHUB_REF_NAME}".zip dist/mati-brain-skill-"${GITHUB_REF_NAME}".zip dist/SHA256SUMS --verify-tag --generate-notes
+        run: gh release create "${GITHUB_REF_NAME}" dist/mati-brain-"${GITHUB_REF_NAME}".zip dist/mati-brain-skill-"${GITHUB_REF_NAME}".zip dist/mati-brain-hermes-"${GITHUB_REF_NAME}".zip dist/SHA256SUMS --verify-tag --generate-notes

@@ -11,6 +11,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 VALIDATE = ROOT / "scripts" / "validate.py"
 RELEASE = ROOT / "scripts" / "release.py"
+PORTABLE = ROOT / "scripts" / "portable.py"
+PORTABLE_FILES = ("plugin.json", "mcp.json", "skills/mati-brain/SKILL.md")
 PLUGIN_FILES = (
     ".codex-plugin/plugin.json", ".claude-plugin/plugin.json", ".mcp.json",
     "skills/mati-brain/SKILL.md", "skills/mati-brain/agents/openai.yaml",
@@ -45,6 +47,8 @@ class ReleaseTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         self.plugin = fixture(self.root)
+        result = self.run_script(PORTABLE)
+        self.assertEqual(result.returncode, 0, result.stderr)
 
     def run_script(self, script, *args):
         return subprocess.run([sys.executable, str(script), "--root", str(self.root), *args], text=True, capture_output=True)
@@ -58,6 +62,7 @@ class ReleaseTests(unittest.TestCase):
         base = self.commit_baseline()
         skill = self.plugin / "skills/mati-brain/SKILL.md"
         skill.write_text(skill.read_text() + "New instruction.\n")
+        self.run_script(PORTABLE)
         result = self.run_script(VALIDATE, "--base", base)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("version", result.stderr.lower())
@@ -69,6 +74,7 @@ class ReleaseTests(unittest.TestCase):
         for rel in (".codex-plugin/plugin.json", ".claude-plugin/plugin.json"):
             path = self.plugin / rel
             data = json.loads(path.read_text()); data["version"] = "0.1.1"; write_json(path, data)
+        self.run_script(PORTABLE)
         self.assertEqual(self.run_script(VALIDATE, "--base", base).returncode, 0)
 
     def test_docs_only_change_needs_no_bump(self):
@@ -104,20 +110,88 @@ class ReleaseTests(unittest.TestCase):
         (self.plugin / "leak").symlink_to(target)
         self.assertNotEqual(self.run_script(VALIDATE).returncode, 0)
 
+    def test_portable_manifest_and_remote_transport(self):
+        manifest = json.loads((self.root / "plugin.json").read_text())
+        self.assertEqual(manifest["$schema"], "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json")
+        self.assertEqual(manifest["name"], "mati-brain")
+        self.assertEqual(manifest["version"], "0.1.0")
+        self.assertNotIn("skills", manifest)
+        self.assertEqual(json.loads((self.root / "mcp.json").read_text()), {
+            "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+            "mcpServers": {"mati-brain": {"type": "streamable-http", "url": ENDPOINT}},
+        })
+        self.assertEqual((self.root / "skills/mati-brain/SKILL.md").read_bytes(),
+                         (self.plugin / "skills/mati-brain/SKILL.md").read_bytes())
+
+    def test_rejects_stale_portable_payload(self):
+        skill = self.plugin / "skills/mati-brain/SKILL.md"
+        skill.write_text(skill.read_text() + "New instruction.\n")
+        self.assertNotEqual(self.run_script(VALIDATE).returncode, 0)
+        self.assertNotEqual(self.run_script(PORTABLE, "--check").returncode, 0)
+        self.assertEqual(self.run_script(PORTABLE).returncode, 0)
+        self.assertEqual(self.run_script(VALIDATE).returncode, 0)
+
+    def test_rejects_portable_tampering_and_extra_skill(self):
+        for rel in ("plugin.json", "mcp.json"):
+            path = self.root / rel
+            original = path.read_bytes()
+            data = json.loads(original)
+            data["headers"] = {"Authorization": "Bearer secret"}
+            write_json(path, data)
+            self.assertNotEqual(self.run_script(VALIDATE).returncode, 0)
+            path.write_bytes(original)
+        extra = self.root / "skills/other/SKILL.md"
+        extra.parent.mkdir()
+        extra.write_text("Unexpected skill")
+        self.assertNotEqual(self.run_script(VALIDATE).returncode, 0)
+
+    def test_rejects_linked_portable_paths_without_writing_target(self):
+        outside = self.root / "outside"
+        outside.mkdir()
+        for rel in ("plugin.json", "mcp.json", "skills/mati-brain/SKILL.md"):
+            path = self.root / rel
+            original = path.read_bytes()
+            target = outside / path.name
+            target.write_bytes(original)
+            path.unlink()
+            path.symlink_to(target)
+            self.assertNotEqual(self.run_script(VALIDATE).returncode, 0)
+            self.assertNotEqual(self.run_script(PORTABLE).returncode, 0)
+            self.assertEqual(target.read_bytes(), original)
+            path.unlink()
+            path.write_bytes(original)
+
+    def test_first_portable_release_checks_baseline_without_portable_files(self):
+        for rel in PORTABLE_FILES:
+            (self.root / rel).unlink()
+        base = self.commit_baseline()
+        for rel in (".codex-plugin/plugin.json", ".claude-plugin/plugin.json"):
+            path = self.plugin / rel
+            data = json.loads(path.read_text())
+            data["version"] = "0.2.0"
+            write_json(path, data)
+        self.assertEqual(self.run_script(PORTABLE).returncode, 0)
+        result = self.run_script(VALIDATE, "--base", base)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
     def test_release_is_reproducible_and_tag_pinned(self):
         one = self.root / "out1"; two = self.root / "out2"
         a = self.run_script(RELEASE, "--tag", "v0.1.0", "--output", str(one))
         self.assertEqual(a.returncode, 0, a.stderr)
         b = self.run_script(RELEASE, "--tag", "v0.1.0", "--output", str(two))
         self.assertEqual(b.returncode, 0, b.stderr)
-        for name in ("mati-brain-v0.1.0.zip", "mati-brain-skill-v0.1.0.zip", "SHA256SUMS"):
+        for name in ("mati-brain-v0.1.0.zip", "mati-brain-skill-v0.1.0.zip", "mati-brain-hermes-v0.1.0.zip", "SHA256SUMS"):
             self.assertEqual((one/name).read_bytes(), (two/name).read_bytes())
         with zipfile.ZipFile(one / "mati-brain-v0.1.0.zip") as z:
             self.assertEqual(set(z.namelist()), {"mati-brain/"+p for p in PLUGIN_FILES})
         with zipfile.ZipFile(one / "mati-brain-skill-v0.1.0.zip") as z:
             self.assertEqual(z.namelist(), ["mati-brain/SKILL.md"])
+        with zipfile.ZipFile(one / "mati-brain-hermes-v0.1.0.zip") as z:
+            self.assertEqual(set(z.namelist()), {"mati-brain/"+p for p in PORTABLE_FILES})
+            for rel in PORTABLE_FILES:
+                self.assertEqual(z.read("mati-brain/"+rel), (self.root/rel).read_bytes())
         lines = (one / "SHA256SUMS").read_text().splitlines()
-        self.assertEqual(len(lines), 2)
+        self.assertEqual(len(lines), 3)
         for line in lines:
             sha, name = line.split("  ")
             self.assertEqual(sha, hashlib.sha256((one/name).read_bytes()).hexdigest())

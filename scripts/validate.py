@@ -4,6 +4,7 @@ import json
 import re
 import subprocess
 from pathlib import Path
+from portable import PORTABLE_FILES, sync
 
 PLUGIN_FILES = (
     ".codex-plugin/plugin.json",
@@ -35,7 +36,11 @@ def check_version_bump(root, base, current):
         return result.stdout
 
     prefix = "plugins/mati-brain/"
-    changed = any((root / prefix / rel).read_bytes() != old_bytes(prefix + rel) for rel in PLUGIN_FILES)
+    baseline = subprocess.run(["git", "ls-tree", "-r", "--name-only", base], cwd=root, capture_output=True, text=True)
+    require(baseline.returncode == 0, "Cannot list baseline tree")
+    tracked = set(baseline.stdout.splitlines())
+    paths = tuple(prefix + rel for rel in PLUGIN_FILES) + PORTABLE_FILES
+    changed = any(rel not in tracked or (root / rel).read_bytes() != old_bytes(rel) for rel in paths)
     if changed:
         old_manifest = json.loads(old_bytes(prefix + ".codex-plugin/plugin.json"))
         old_version = old_manifest.get("version")
@@ -79,6 +84,7 @@ def validate(root):
 
     skill = (plugin / "skills/mati-brain/SKILL.md").read_text(encoding="utf-8")
     require(skill.startswith("---\n") and re.search(r"(?m)^name:\s*mati-brain\s*$", skill), "Skill identity changed")
+    sync(root, check=True)
     return version
 
 

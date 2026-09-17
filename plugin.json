@@ -1,8 +1,11 @@
 {
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "mati-brain",
   "version": "0.2.0",
   "description": "Commencer avec Mati et appliquer les méthodes accessibles du Brain privé.",
-  "author": {"name": "Mati Technologies"},
+  "author": {
+    "name": "Mati Technologies"
+  },
   "homepage": "https://github.com/Mati-Technologies/mati-plugins",
   "repository": "https://github.com/Mati-Technologies/mati-plugins"
 }

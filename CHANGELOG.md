@@ -1,5 +1,12 @@
 # Versions du plugin Mati Brain
 
+## 0.2.0 — 2026-09-17
+
+- Ajout du paquet portable Hermes (Agent Plugins v1) à la racine, avec MCP Streamable HTTP et skill partagé.
+- Génération des fichiers portables depuis la source Claude/Codex; contrôle de synchronisation, versions et contenu en CI.
+- Archive Hermes déterministe et empreinte SHA-256 ajoutées aux livraisons.
+- Guide Hermes avec activation, mise à jour et limite OAuth explicitement séparée de l’installation.
+
 ## 0.1.1 — 2026-09-16
 
 - Parcours « Connecter Mati Brain » distinct de l'installation du plugin.
