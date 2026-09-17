@@ -67,3 +67,5 @@ Avec un checkout Hermes et son environnement Python installé, le contrôle suiv
 Pour une installation complète de test, utiliser un `HERMES_HOME` temporaire vide et `hermes plugins install file:///chemin/absolu/du/depot --enable`. Le dépôt doit être commité car l’installateur le clone. Vérifier ensuite `hermes plugins list` et la découverte du skill/MCP. Ne pas utiliser un profil employé pour ce contrôle de paquet.
 
 Cette validation de chargement et d’installation ne prouve ni le consentement Google, ni la compatibilité du callback, ni une lecture Brain dans Hermes. Voir la limite amont et le parcours de connexion dans le guide d’installation.
+
+Contrôle du 17 septembre 2026 avec Hermes `13e72fb205` : installation et activation du dépôt commité dans un `HERMES_HOME` temporaire réussies; version 0.2.0 affichée, source et archive chargées avec un skill et un MCP distant sans diagnostic. Aucun OAuth ni appel au Brain effectué depuis ce profil de test.
