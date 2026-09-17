@@ -114,6 +114,51 @@ Vérifie ensuite la version proposée dans le gestionnaire et applique la mise �
 
 Ces commandes sont présentes dans l’aide locale de **Codex CLI 0.153.4**, vérifiée le 16 septembre 2026. Sources : [marketplaces Codex](https://developers.openai.com/plugins/build/plugins) et [applications compatibles avec les plugins](https://learn.chatgpt.com/docs/plugins). L’extension IDE ne prend pas les plugins en charge.
 
+## Hermes — paquet portable
+
+Le dépôt expose un paquet **Agent Plugins v1** directement à sa racine. Il contient le même skill d’entrée que Claude/Codex et la connexion distante dans `mcp.json` (transport `streamable-http`). Il ne nécessite ni pont MCP supplémentaire ni serveur Brain local.
+
+### Installer et activer
+
+Dans le profil Hermes à utiliser :
+
+```sh
+hermes plugins install Mati-Technologies/mati-plugins
+hermes plugins list
+```
+
+Accepte l’activation proposée par l’installateur ou active le paquet séparément :
+
+```sh
+hermes plugins enable mati-brain
+```
+
+Pour les versions dont l’aide propose `--enable`, installation et activation peuvent être réunies :
+
+```sh
+hermes plugins install Mati-Technologies/mati-plugins --enable
+```
+
+Redémarre la session Hermes. Le skill est exposé sous un nom préfixé : l’assistant doit utiliser `skills_list` puis `skill_view` avec le nom effectivement retourné. Il ne doit pas deviner le préfixe. Consulte [les plugins portables Hermes](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/plugins/index.md).
+
+### Connexion Google : limite des versions vérifiées
+
+**Le chargement du paquet ne suffit pas encore à rendre Brain utilisable dans toutes les versions Hermes.** Dans le code Hermes vérifié le 17 septembre 2026 (installation locale `13e72fb205` et source amont consultée), `hermes mcp list` et `hermes mcp login` recherchent les serveurs de la configuration native, sans inclure les MCP des plugins portables. Le paquet et son skill peuvent donc être chargés alors que le serveur reste introuvable pour le login. Ce défaut est suivi dans [Hermes #87253](https://github.com/NousResearch/hermes-agent/issues/87253).
+
+Après une correction Hermes, vérifier que `hermes mcp list` affiche bien le serveur du plugin et son URL avant d’utiliser `hermes mcp login` avec le nom réellement affiché. La personne termine ensuite le consentement Google dans son navigateur. Le retour OAuth accepté par Brain et la lecture autorisée doivent encore être validés dans Hermes; aucune réussite OAuth Hermes n’est annoncée par cette livraison.
+
+Si le serveur portable n’apparaît pas pour le login, arrêter ce parcours et signaler la version Hermes au mainteneur. Ne pas ajouter automatiquement une deuxième connexion native ni copier un jeton dans `mcp.json`. Pour un besoin immédiat, le parcours MCP natif + skill séparé reste une installation distincte à réaliser avec le mainteneur, en évitant de laisser le MCP portable actif en double.
+
+Après une connexion réussie, effectuer la [vérification de lecture](#vérifier-la-connexion-avec-une-lecture).
+
+### Mettre à jour
+
+```sh
+hermes plugins update mati-brain
+```
+
+Redémarre la session et vérifie la version affichée. Une installation épinglée à une révision ne suit pas automatiquement la branche par défaut. L’archive `mati-brain-hermes-vX.Y.Z.zip` fournit aussi le dossier portable autonome; elle est distincte de l’archive Claude/Codex et ne se met pas à jour seule.
+
 ## ChatGPT — distribution par un espace de travail
 
 Un administrateur peut importer ce dépôt dans **Admin → Plugins → Add → Import marketplace** :

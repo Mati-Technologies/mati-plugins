@@ -7,6 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from validate import PLUGIN_FILES, validate
+from portable import PORTABLE_FILES
 
 
 def archive(path, entries):
@@ -29,11 +30,13 @@ def release(root, output, tag=None):
     output.mkdir(parents=True, exist_ok=True)
     full = output / f"mati-brain-{expected}.zip"
     skill = output / f"mati-brain-skill-{expected}.zip"
+    hermes = output / f"mati-brain-hermes-{expected}.zip"
     archive(full, [("mati-brain/" + rel, (plugin / rel).read_bytes()) for rel in sorted(PLUGIN_FILES)])
     archive(skill, [("mati-brain/SKILL.md", (plugin / "skills/mati-brain/SKILL.md").read_bytes())])
+    archive(hermes, [("mati-brain/" + rel, (root / rel).read_bytes()) for rel in sorted(PORTABLE_FILES)])
     checksums = output / "SHA256SUMS"
-    checksums.write_text("".join(f"{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.name}\n" for path in (full, skill)), encoding="ascii")
-    return full, skill, checksums
+    checksums.write_text("".join(f"{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.name}\n" for path in (full, skill, hermes)), encoding="ascii")
+    return full, skill, hermes, checksums
 
 
 def main():

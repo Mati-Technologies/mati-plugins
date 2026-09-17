@@ -1,0 +1,9 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "mati-brain": {
+      "type": "streamable-http",
+      "url": "https://mati-brain-pilot.tail760c23.ts.net/mcp"
+    }
+  }
+}
